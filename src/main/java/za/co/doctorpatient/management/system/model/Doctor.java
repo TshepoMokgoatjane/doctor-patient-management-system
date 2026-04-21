@@ -6,20 +6,25 @@ public class Doctor {
 	private int id;
 	private String firstName;
 	private String lastName;
+	private String specialization;
 	private String email;
 	
 	public Doctor() {}
 	
-	public Doctor(int id, String firstName, String lastName, String email) {
+	public Doctor(String firstName, String lastName, String specialization, String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.specialization = specialization;
+		this.email = email;
+	}
+
+	public Doctor(int id, String firstName, String lastName, String specialization, String email) {
+		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-	}
-	
-	public Doctor(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.specialization = specialization;
 		this.email = email;
 	}
 
@@ -47,6 +52,14 @@ public class Doctor {
 		this.lastName = lastName;
 	}
 
+	public String getSpecialization() {
+		return specialization;
+	}
+
+	public void setSpecialization(String specialization) {
+		this.specialization = specialization;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -57,7 +70,7 @@ public class Doctor {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, firstName, id, lastName);
+		return Objects.hash(email, firstName, id, lastName, specialization);
 	}
 
 	@Override
@@ -70,11 +83,12 @@ public class Doctor {
 			return false;
 		Doctor other = (Doctor) obj;
 		return Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName) && id == other.id
-				&& Objects.equals(lastName, other.lastName);
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(specialization, other.specialization);
 	}
 
 	@Override
 	public String toString() {
-		return "Doctor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Doctor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", specialization="
+				+ specialization + ", email=" + email + "]";
 	}
 }
