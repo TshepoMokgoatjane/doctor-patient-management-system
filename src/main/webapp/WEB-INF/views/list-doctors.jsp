@@ -1,22 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>List of Doctors</title>
-		
-		<!-- Add Bootstrap CDN to JSP -->
-		<link
-		    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-		    rel="stylesheet"
-		    crossorigin="anonymous">
-		    
-	</head>
+	<%
+		request.setAttribute("pageTitle", "List of Doctors");
+	%>
 	
-	<body class="bg-light">
+	<jsp:include page="jsp/layout/header.jsp" />
 		
-		<div class="container mt-5">
 		
 			<!-- Page Header -->
 			<div class="d-flex justify-content-between align-items-center mb-4">
@@ -98,12 +88,5 @@
 					</table>
 				</div>
 			</div>
-		</div>
-		
-		<!-- Add Bootstrap CDN Support -->
-		<script
-		    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		    crossorigin="anonymous"></script>
-		
-	</body>
-</html>
+			
+	<jsp:include page="jsp/layout/footer.jsp" />	
