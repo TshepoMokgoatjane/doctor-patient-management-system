@@ -24,18 +24,40 @@ public class DoctorDAO {
 		this.dataSource = dataSource;
 	}
 	
-	public List<Doctor> getDoctors(int offset, int limit) throws Exception {
+	public List<Doctor> getDoctors(int offset, int limit, String sortField, String sortDir) throws Exception {
 		
-		LOGGER.info("Attempting to fetch a list of Doctors");
+		LOGGER.info("Fetching doctors with pagination and sorting");
+		
+		// Whitelist sortable columns
+		String orderByColumn;
+		
+		switch (sortField) {
+		case "firstName":
+			orderByColumn = "first_name";
+			break;
+		case "lastName":
+			orderByColumn = "last_name";
+			break;
+		case "specialization":
+			orderByColumn = "specialization";
+			break;
+		case "email":
+			orderByColumn = "email";
+			break;
+			default:
+				orderByColumn = "last_name";
+		}
+		
+		String orderDirection = "desc".equalsIgnoreCase(sortDir) ? "DESC" : "ASC";
 		
 		List<Doctor> doctors = new ArrayList<>();
 		
-		String sql = """
+		String sql = String.format("""
 				SELECT id, first_name, last_name, specialization, email 
 				FROM doctor
-				ORDER BY last_name
+				ORDER BY %s %s
 				LIMIT ? OFFSET ?
-				""";
+				""", orderByColumn, orderDirection);
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(sql);				

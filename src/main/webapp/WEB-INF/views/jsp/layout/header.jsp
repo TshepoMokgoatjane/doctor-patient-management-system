@@ -12,6 +12,13 @@
 		<!-- Add Bootstrap Icons -->
 		<link rel="stylesheet"
       		href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+      		
+      	<style type="text/css">
+      	th a {
+      		color: inherit;
+      		cursor: pointer;
+      		text-decoration: none;
+      	}</style>
 		    
 	</head>
 		

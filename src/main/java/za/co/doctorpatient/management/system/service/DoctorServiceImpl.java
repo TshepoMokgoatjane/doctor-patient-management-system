@@ -18,12 +18,12 @@ public class DoctorServiceImpl implements DoctorService {
 		this.doctorDAO = doctorDAO;
 	}
 	
-	public List<Doctor> getDoctorsByPage(int page, int pageSize) throws Exception {
+	public List<Doctor> getDoctorsByPage(int page, int pageSize, String sortField, String sortDir) throws Exception {
 		
-		LOGGER.debug("Retrieving doctors for page {} with page size {}", page, pageSize);
+		LOGGER.debug("Retrieving doctors for page {} with page size {}, sorted by {} {}", page, pageSize, sortField, sortDir);
 		
 		int offset = (page - 1) * pageSize;
-		return doctorDAO.getDoctors(offset, pageSize);
+		return doctorDAO.getDoctors(offset, pageSize, sortField, sortDir);
 	}
 	
 	public int getTotalPages(int pageSize) throws Exception {
@@ -32,5 +32,11 @@ public class DoctorServiceImpl implements DoctorService {
 		
 		int total = doctorDAO.getDoctorCount();
 		return (int) Math.ceil((double) total / pageSize);
+	}
+
+	@Override
+	public void deleteDoctor(int doctorId) {
+		// TODO Auto-generated method stub
+		
 	}
 }

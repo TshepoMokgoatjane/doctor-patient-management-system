@@ -83,6 +83,9 @@ public class DoctorController extends HttpServlet {
 				case "LIST":
 					listDoctors(request, response);
 					break;
+				case "DELETE":
+					deleteDoctor(request, response);
+					break;
 				default:
 					LOGGER.warn("Unknown command '{}', defaulting to LIST", command);
 					listDoctors(request, response);
@@ -93,6 +96,21 @@ public class DoctorController extends HttpServlet {
 		}
 	}
 	
+	private void deleteDoctor(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
+		int page = Integer.parseInt(request.getParameter("page"));
+		String sortField = request.getParameter("sortField");
+		String sortDir = request.getParameter("sortDir");
+		
+		doctorService.deleteDoctor(doctorId);
+		
+		// PRG pattern + state preservation
+		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST" +
+		"&page=" + page + "&sortField=" + sortField + "&sortDir=" + sortDir);
+		
+	}
+
 	// -------------------------------------------------------
 	// Command handlers
 	// -------------------------------------------------------
@@ -114,8 +132,23 @@ public class DoctorController extends HttpServlet {
 			}
 		}
 		
+		// Sorting parameters
+		String sortField = request.getParameter("sortField");
+		String sortDir = request.getParameter("sortDir");
+		
+		if (sortField == null) {
+			sortField = "lastName";
+		}
+		
+		if (sortDir == null) {
+			sortDir = "asc";
+		}
+		
+		// Toggle direction for UI
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+		
 		// Fetch paginated data
-		List<Doctor> doctors = doctorService.getDoctorsByPage(page, pageSize);
+		List<Doctor> doctors = doctorService.getDoctorsByPage(page, pageSize, sortField, sortDir);
 		
 		// Calculate total pages
 		int totalPages = doctorService.getTotalPages(pageSize);
@@ -124,6 +157,9 @@ public class DoctorController extends HttpServlet {
 		request.setAttribute("doctors", doctors);
 		request.setAttribute("currentPage", page);
 		request.setAttribute("totalPages",  totalPages);
+		request.setAttribute("sortField", sortField);
+		request.setAttribute("sortDir", sortDir);
+		request.setAttribute("reverseSortDir", reverseSortDir);
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/list-doctors.jsp");
 		

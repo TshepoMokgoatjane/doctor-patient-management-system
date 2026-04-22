@@ -26,10 +26,50 @@
 					
 						<thead class="table-dark">
 							<tr>
-								<th>First Name</th>
-								<th>Last Name</th>
-								<th>Specialization</th>
-								<th>Email</th>
+								<th>
+									<a href="${pageContext.request.contextPath}/DoctorController?command=LIST&page=${currentPage}&sortField=firstName&sortDir=${reverseSortDir}">
+									
+										First Name				
+										
+										<c:if test="${sortField == 'firstName'}">
+											<i class="bi ${sortDir == 'asc' ? 'bi-chevron-up' : 'bi-chevron-down'}"></i>
+										</c:if>					
+									</a>
+								</th>
+								
+								<th>
+									<a href="${pageContext.request.contextPath}/DoctorController?command=LIST&page=${currentPage}&sortField=lastName&sortDir=${reverseSortDir}">
+									
+										Last Name
+										
+										<c:if test="${sortField == 'lastName'}">
+											<i class="bi ${sortDir == 'asc' ? 'bi-chevron-up' : 'bi-chevron-down'}"></i>
+										</c:if>	
+									</a>
+								</th>
+								
+								<th>
+									<a href="${pageContext.request.contextPath}/DoctorController?command=LIST&page=${currentPage}&sortField=specialization&sortDir=${reverseSortDir}">
+									
+										Specialization
+										
+										<c:if test="${sortField == 'specialization'}">
+											<i class="bi ${sortDir == 'asc' ? 'bi-chevron-up' : 'bi-chevron-down'}"></i>
+										</c:if>	
+									</a>
+								</th>
+								
+								<th>
+									<a href="${pageContext.request.contextPath}/DoctorController?command=LIST&page=${currentPage}&sortField=email&sortDir=${reverseSortDir}">
+									
+										Email
+										
+										<c:if test="${sortField == 'email'}">
+											<i class="bi ${sortDir == 'asc' ? 'bi-chevron-up' : 'bi-chevron-down'}"></i>
+										</c:if>	
+									</a>
+								</th>
+								
 								<th class="text-center">Action</th>
 							</tr>
 						</thead>						
@@ -66,6 +106,9 @@
 													data-bs-target="#deleteDoctorModal"
 													data-doctor-id="${doctor.id}"
 													data-doctor-name="${doctor.firstName} ${doctor.lastName}"
+													data-page="${currentPage}"
+													data-sort-field="${sortField}"
+													data-sort-dir="${sortDir}"
 													>
 													<i class="bi bi-trash"></i> Delete
 												</a>
@@ -101,17 +144,23 @@
 									<!-- Previous -->
 							        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
 							            <a class="page-link"
-							            	href="DoctorController?command=LIST&page=${currentPage - 1}">
+							            	href="${pageContext.request.contextPath}/DoctorController?command=LIST&page=${currentPage - 1}">
 							            	Previous
 							            </a>
 							        </li>
 							
 							        <!-- Page Numbers -->
-							        <c:forEach begin="1" end="${totalPages}" var="i">
+							        <c:forEach begin="1" end="${totalPages}" var="i">  	    
+							        
+								        <c:url var="pageUrl" value="DoctorController">
+								        	<c:param name="command" value="LIST" />
+								        	<c:param name="page" value="${i}" />
+								        	<c:param name="sortField" value="${sortField}" />
+								        	<c:param name="sortDir" value="${sortDir}" />							        
+								        </c:url>							        
+							        
 							        	<li class="page-item ${i == currentPage ? 'active' : '' }">
-							        		<a class="page-link"
-							        			href="DoctorController?command=LIST&page=${i}"
-							        		>
+							        		<a class="page-link" href="${pageUrl}">
 							        			${i}
 							        		</a>
 							        	</li>
@@ -180,11 +229,16 @@
 			
 			        const doctorId = button.getAttribute('data-doctor-id');
 			        const doctorName = button.getAttribute('data-doctor-name');
+			        const page = button.getAttribute('data-page');
+			        const sortField = button.getAttribute('data-sort-field');
+			        const sortDir = button.getAttribute('data-sort-dir');
 			
 			        const doctorNameSpan = deleteDoctorModal.querySelector('#doctorName');
 			        const confirmDeleteBtn = deleteDoctorModal.querySelector('#confirmDeleteBtn');
 			
 			        doctorNameSpan.textContent = doctorName;
-			        confirmDeleteBtn.href ='DoctorController?command=DELETE&doctorId=' + doctorId;
+			        
+			        confirmDeleteBtn.href ='DoctorController?command=DELETE&doctorId=' + doctorId + 
+			        		'&page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir;
 			    });
 			</script>
