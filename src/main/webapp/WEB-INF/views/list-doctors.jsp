@@ -90,39 +90,45 @@
 				</div>
 			</div>
 			
-			<!--  Add Static Pagination -->			
+			<!--  Add Dynamic Pagination -->			
 			<c:if test="${not empty doctors}">
-				<div class="row">
-					<div class="col">
-						<nav class="mt-4 shadow-sm p-2 bg-white rounded">
-						    <ul class="pagination pagination-sm justify-content-center">
-						
-						        <li class="page-item disabled">
-						            <a class="page-link">Previous</a>
-						        </li>
-						
-						        <li class="page-item active">
-						            <a class="page-link" href="DoctorController?command=LIST&page=1">1</a>
-						        </li>
-						
-						        <li class="page-item">
-						            <a class="page-link" href="DoctorController?command=LIST&page=2">2</a>
-						        </li>
-						
-						        <li class="page-item">
-						            <a class="page-link" href="DoctorController?command=LIST&page=3">3</a>
-						        </li>
-						
-						        <li class="page-item">
-						            <a class="page-link" href="DoctorController?command=LIST&page=2">
-						                Next
-						            </a>
-						        </li>
-						
-						    </ul>
-						</nav>
+				<c:if test="${totalPages > 1}">
+					<div class="row">
+						<div class="col">
+							<nav class="mt-4 shadow-sm p-2 bg-white rounded">
+							    <ul class="pagination pagination-sm justify-content-center">
+							
+									<!-- Previous -->
+							        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+							            <a class="page-link"
+							            	href="DoctorController?command=LIST&page=${currentPage - 1}">
+							            	Previous
+							            </a>
+							        </li>
+							
+							        <!-- Page Numbers -->
+							        <c:forEach begin="1" end="${totalPages}" var="i">
+							        	<li class="page-item ${i == currentPage ? 'active' : '' }">
+							        		<a class="page-link"
+							        			href="DoctorController?command=LIST&page=${i}"
+							        		>
+							        			${i}
+							        		</a>
+							        	</li>
+							        </c:forEach>
+							
+									<!--  Next -->
+							        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+							            <a class="page-link" href="DoctorController?command=LIST&page=${currentPage + 1}">
+							                Next
+							            </a>
+							        </li>
+							
+							    </ul>
+							</nav>
+						</div>
 					</div>
-				</div>
+				</c:if>
 			</c:if>
 						
 			

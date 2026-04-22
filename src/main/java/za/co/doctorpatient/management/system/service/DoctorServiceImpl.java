@@ -18,15 +18,19 @@ public class DoctorServiceImpl implements DoctorService {
 		this.doctorDAO = doctorDAO;
 	}
 	
-	@Override
-	public List<Doctor> getAllDoctors() throws Exception {
+	public List<Doctor> getDoctorsByPage(int page, int pageSize) throws Exception {
 		
-		LOGGER.info("Business request: retrieve all doctors");
+		LOGGER.debug("Retrieving doctors for page {} with page size {}", page, pageSize);
 		
-		List<Doctor> doctors = doctorDAO.getDoctors();
+		int offset = (page - 1) * pageSize;
+		return doctorDAO.getDoctors(offset, pageSize);
+	}
+	
+	public int getTotalPages(int pageSize) throws Exception {
 		
-		LOGGER.debug("Business result: {} doctors retrieved.", doctors.size());
+		LOGGER.debug("Calculating total number of pages with page size {}", pageSize);
 		
-		return doctors;
+		int total = doctorDAO.getDoctorCount();
+		return (int) Math.ceil((double) total / pageSize);
 	}
 }

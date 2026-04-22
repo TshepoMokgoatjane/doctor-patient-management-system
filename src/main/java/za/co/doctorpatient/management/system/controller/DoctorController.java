@@ -100,9 +100,30 @@ public class DoctorController extends HttpServlet {
 		
 		LOGGER.debug("Handling LIST doctors request");
 		
-		List<Doctor> doctors = doctorService.getAllDoctors();
+		// Pagination configuration
+		int page = 1;
+		int pageSize = 5; // doctors per page
 		
+		// Read page parameter
+		String pageParam = request.getParameter("page");
+		if (pageParam != null) {
+			try {
+				page = Integer.parseInt(pageParam);
+			} catch (NumberFormatException e) {
+				page = 1;
+			}
+		}
+		
+		// Fetch paginated data
+		List<Doctor> doctors = doctorService.getDoctorsByPage(page, pageSize);
+		
+		// Calculate total pages
+		int totalPages = doctorService.getTotalPages(pageSize);
+		
+		// Expose to JSP
 		request.setAttribute("doctors", doctors);
+		request.setAttribute("currentPage", page);
+		request.setAttribute("totalPages",  totalPages);
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/list-doctors.jsp");
 		

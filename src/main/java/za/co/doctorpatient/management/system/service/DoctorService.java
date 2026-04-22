@@ -5,6 +5,8 @@ import java.util.List;
 import za.co.doctorpatient.management.system.model.Doctor;
 
 public interface DoctorService {
-	
-	List<Doctor> getAllDoctors() throws Exception;
+
+	List<Doctor> getDoctorsByPage(int page, int pageSize) throws Exception;
+
+	int getTotalPages(int pageSize) throws Exception;
 }
