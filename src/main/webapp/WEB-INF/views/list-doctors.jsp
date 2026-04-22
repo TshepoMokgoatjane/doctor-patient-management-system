@@ -60,15 +60,15 @@
 											<td class="text-center">
 												<a 
 													href="${editLink}"
-													class="btn btn-sm btn-primary">
-													Edit
+													class="btn btn-sm btn-primary me-1">
+													<i class="bi bi-pencil-square"></i> Edit
 												</a>
 												|
 												<a href="${deleteLink}" 
 													onclick="if (!(confirm('Are you sure you want to delete this Doctor from the list?'))) return false;"
 													class="btn btn-sm btn-danger"
 													>
-												Delete
+													<i class="bi bi-trash"></i> Delete
 												</a>
 											</td>
 										</tr>				
