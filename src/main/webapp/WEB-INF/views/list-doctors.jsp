@@ -92,6 +92,40 @@
 				</div>
 			</div>
 			
+			<!--  Add Static Pagination -->
+			<div class="row">
+				<div class="col">
+					<nav class="mt-4 shadow-sm p-2 bg-white rounded">
+					    <ul class="pagination pagination-sm justify-content-center">
+					
+					        <li class="page-item disabled">
+					            <a class="page-link">Previous</a>
+					        </li>
+					
+					        <li class="page-item active">
+					            <a class="page-link" href="DoctorController?command=LIST&page=1">1</a>
+					        </li>
+					
+					        <li class="page-item">
+					            <a class="page-link" href="DoctorController?command=LIST&page=2">2</a>
+					        </li>
+					
+					        <li class="page-item">
+					            <a class="page-link" href="DoctorController?command=LIST&page=3">3</a>
+					        </li>
+					
+					        <li class="page-item">
+					            <a class="page-link" href="DoctorController?command=LIST&page=2">
+					                Next
+					            </a>
+					        </li>
+					
+					    </ul>
+					</nav>
+				</div>
+			</div>
+						
+			
 			<!-- Add Bootstrap Modal - Delete Confirmation Modal -->
 			<div class="modal fade" id="deleteDoctorModal" tabindex="-1"
 			     aria-labelledby="deleteDoctorModalLabel" aria-hidden="true">
