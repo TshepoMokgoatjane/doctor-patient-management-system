@@ -23,7 +23,7 @@ import za.co.doctorpatient.management.system.service.DoctorServiceImpl;
 /**
  * Servlet implementation class DoctorServletController
  */
-@WebServlet(description = "Handles all Web HTTP Request and Response in the Application.", urlPatterns = { "/DoctorServletController" })
+@WebServlet(description = "Handles all Web HTTP Request and Response in the Application.", urlPatterns = { "/DoctorController" })
 public class DoctorController extends HttpServlet {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DoctorController.class);
