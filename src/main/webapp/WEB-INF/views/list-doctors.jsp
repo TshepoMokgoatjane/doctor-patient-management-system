@@ -7,7 +7,6 @@
 	
 	<jsp:include page="jsp/layout/header.jsp" />
 		
-		
 			<!-- Page Header -->
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<h1 class="fw-bold">List of Doctors:</h1>
@@ -25,7 +24,7 @@
 				<div class="card-body">
 					<table class="table table-dark table-striped table-hover align-middle">
 					
-						<thead class="thead-dark">
+						<thead class="table-dark">
 							<tr>
 								<th>First Name</th>
 								<th>Last Name</th>
@@ -33,8 +32,7 @@
 								<th>Email</th>
 								<th class="text-center">Action</th>
 							</tr>
-						</thead>
-						
+						</thead>						
 						
 						<tbody>
 							
@@ -58,12 +56,10 @@
 											<td>${doctor.specialization}</td>
 											<td>${doctor.email}</td>
 											<td class="text-center">
-												<a 
-													href="${editLink}"
+												<a href="${editLink}"
 													class="btn btn-sm btn-primary me-1">
 													<i class="bi bi-pencil-square"></i> Edit
-												</a>
-												|
+												</a> 
 												<a href="#"													
 													class="btn btn-sm btn-danger"
 													data-bs-toggle="modal"
@@ -80,8 +76,10 @@
 								
 								<c:otherwise>
 									<tr>
-										<td class="alert alert-warning text-center mb-0">
-										Oh snap! No doctors found.
+										<td colspan="5" class="text-center">
+											<div class="alert alert-warning mb-0">
+												Oh snap! No doctors found.
+											</div>
 										</td>
 									</tr>
 								</c:otherwise>
@@ -161,6 +159,8 @@
 			
 			        </div>
 			    </div>
+			
+	<jsp:include page="jsp/layout/footer.jsp" />	
 			</div>
 			
 			<script>
@@ -179,7 +179,3 @@
 			        confirmDeleteBtn.href ='DoctorController?command=DELETE&doctorId=' + doctorId;
 			    });
 			</script>
-			
-
-			
-	<jsp:include page="jsp/layout/footer.jsp" />	
