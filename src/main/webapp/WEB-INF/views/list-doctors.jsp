@@ -64,9 +64,12 @@
 													<i class="bi bi-pencil-square"></i> Edit
 												</a>
 												|
-												<a href="${deleteLink}" 
-													onclick="if (!(confirm('Are you sure you want to delete this Doctor from the list?'))) return false;"
+												<a href="#"													
 													class="btn btn-sm btn-danger"
+													data-bs-toggle="modal"
+													data-bs-target="#deleteDoctorModal"
+													data-doctor-id="${doctor.id}"
+													data-doctor-name="${doctor.firstName} ${doctor.lastName}"
 													>
 													<i class="bi bi-trash"></i> Delete
 												</a>
@@ -88,5 +91,61 @@
 					</table>
 				</div>
 			</div>
+			
+			<!-- Add Bootstrap Modal - Delete Confirmation Modal -->
+			<div class="modal fade" id="deleteDoctorModal" tabindex="-1"
+			     aria-labelledby="deleteDoctorModalLabel" aria-hidden="true">
+			    
+			    <div class="modal-dialog modal-dialog-centered">
+			        <div class="modal-content">
+			
+			            <div class="modal-header bg-danger text-white">
+			                <h5 class="modal-title" id="deleteDoctorModalLabel">
+			                    Confirm Deletion
+			                </h5>
+			                <button type="button" class="btn-close btn-close-white"
+			                        data-bs-dismiss="modal" aria-label="Close"></button>
+			            </div>
+			
+			            <div class="modal-body">
+			                Are you sure you want to delete
+			                <strong id="doctorName"></strong>?
+			                <br />
+			                This action cannot be undone.
+			            </div>
+			
+			            <div class="modal-footer">
+			                <button type="button" class="btn btn-secondary"
+			                        data-bs-dismiss="modal">
+			                    Cancel
+			                </button>
+			
+			                <a id="confirmDeleteBtn" class="btn btn-danger">
+			                    Delete
+			                </a>
+			            </div>
+			
+			        </div>
+			    </div>
+			</div>
+			
+			<script>
+			    const deleteDoctorModal = document.getElementById('deleteDoctorModal');
+			
+			    deleteDoctorModal.addEventListener('show.bs.modal', function (event) {
+			        const button = event.relatedTarget;
+			
+			        const doctorId = button.getAttribute('data-doctor-id');
+			        const doctorName = button.getAttribute('data-doctor-name');
+			
+			        const doctorNameSpan = deleteDoctorModal.querySelector('#doctorName');
+			        const confirmDeleteBtn = deleteDoctorModal.querySelector('#confirmDeleteBtn');
+			
+			        doctorNameSpan.textContent = doctorName;
+			        confirmDeleteBtn.href ='DoctorController?command=DELETE&doctorId=' + doctorId;
+			    });
+			</script>
+			
+
 			
 	<jsp:include page="jsp/layout/footer.jsp" />	
