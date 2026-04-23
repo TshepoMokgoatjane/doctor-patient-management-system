@@ -10,7 +10,7 @@ public interface DoctorService {
 
 	int getTotalPages(int pageSize) throws Exception;
 
-	void deleteDoctor(int doctorId);
+	void deleteDoctor(int doctorId) throws Exception;
 	
 	int addDoctor(Doctor doctor) throws Exception;
 }

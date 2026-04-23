@@ -35,9 +35,8 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public void deleteDoctor(int doctorId) {
-		// TODO Auto-generated method stub
-		
+	public void deleteDoctor(int doctorId) throws Exception {
+		doctorDAO.deleteDoctor(doctorId);
 	}
 	
 	@Override

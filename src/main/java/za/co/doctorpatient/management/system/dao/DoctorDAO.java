@@ -139,13 +139,31 @@ public class DoctorDAO {
 				} else {
 					throw new SQLException("Insert succeeded but no ID obtained.");
 				}
-			}
-			
-			
+			}			
 			
 		} catch (SQLException e) {
 			LOGGER.error("Failed to insert new doctor record in database table", e);
 			throw new Exception("Unable to insert new doctor", e);
+		}
+	}
+	
+	public boolean deleteDoctor(int doctorId) throws Exception {
+		
+		LOGGER.info("Attempting to delete doctor with ID {}", doctorId);
+		
+		String sql = "DELETE FROM doctor WHERE id=?";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setInt(1, doctorId);
+			int rows = preparedStatement.executeUpdate();
+			
+			return rows > 0;
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to delete doctor with ID {} because {}", doctorId, e);
+			throw new Exception("Unabled to delete", e);
 		}
 	}
 }

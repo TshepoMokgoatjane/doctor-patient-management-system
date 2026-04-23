@@ -16,7 +16,7 @@
 				</a>
 			</div>
 			
-			<!-- Success Message -->
+			<!-- Success Message - ADDED -->
 			<c:if test="${param.success == 'added'}">
 				<div id="successAlert"
 					class="alert alert-success alert-dismissible fade show"
@@ -27,6 +27,13 @@
 						class="btn-close"
 						data-bs-dismiss="alert"
 						aria-label="Close"></button>
+				</div>
+			</c:if>
+			<!-- Success Message - DELETED -->
+			<c:if test="${param.success == 'deleted'}">
+				<div id="deleteAlert"
+					class="alert alert-danger alert-dismissible fade show">
+					Doctor deleted successfully.
 				</div>
 			</c:if>
 			
@@ -229,7 +236,8 @@
 			        </div>
 			    </div>
 			
-	<jsp:include page="jsp/layout/footer.jsp" />	
+	<jsp:include page="jsp/layout/footer.jsp" />
+	
 			</div>
 			
 			<script>
@@ -264,4 +272,13 @@
 						}
 					}, 5000	// 5 seconds	
 				);
+				setTimeout(
+						() => {
+							const alert = document.getElementById('deleteAlert');
+							if (alert) {
+								const bsAlert = new bootstrap.Alert(alert);
+								bsAlert.close();
+							}
+						}, 5000	// 5 seconds	
+					);
 			</script>

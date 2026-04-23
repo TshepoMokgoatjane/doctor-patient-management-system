@@ -125,7 +125,7 @@ public class DoctorController extends HttpServlet {
 		
 	}
 
-	private void deleteDoctor(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void deleteDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
 		int page = Integer.parseInt(request.getParameter("page"));
@@ -136,7 +136,7 @@ public class DoctorController extends HttpServlet {
 		
 		// PRG pattern + state preservation
 		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST" +
-		"&page=" + page + "&sortField=" + sortField + "&sortDir=" + sortDir);
+		"&page=" + page + "&sortField=" + sortField + "&sortDir=" + sortDir + "&success=deleted");
 		
 	}
 
