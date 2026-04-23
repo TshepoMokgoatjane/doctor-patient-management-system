@@ -11,13 +11,24 @@
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<h1 class="fw-bold">List of Doctors:</h1>
 				
-				<input 
-						type="button" 
-						value="Add Doctor"
-						onclick="window.location.href='add-doctor-form.jsp'; return false;"
-						class="btn btn-success"
-					/>
+				<a href="${pageContext.request.contextPath}/DoctorController?command=SHOW_ADD_DOCTOR_FORM" class="btn btn-success">
+					Add Doctor
+				</a>
 			</div>
+			
+			<!-- Success Message -->
+			<c:if test="${param.success == 'added'}">
+				<div id="successAlert"
+					class="alert alert-success alert-dismissible fade show"
+					role="alert">
+					<strong>Success!</strong> Doctor added successfully.
+					
+					<button type="button" 
+						class="btn-close"
+						data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+			</c:if>
 			
 			<!-- Doctors Table Card -->
 			<div class="card shadow-sm">
@@ -241,4 +252,16 @@
 			        confirmDeleteBtn.href ='DoctorController?command=DELETE&doctorId=' + doctorId + 
 			        		'&page=' + page + '&sortField=' + sortField + '&sortDir=' + sortDir;
 			    });
+			</script>
+			
+			<script>
+				setTimeout(
+					() => {
+						const alert = document.getElementById('successAlert');
+						if (alert) {
+							const bsAlert = new bootstrap.Alert(alert);
+							bsAlert.close();
+						}
+					}, 5000	// 5 seconds	
+				);
 			</script>

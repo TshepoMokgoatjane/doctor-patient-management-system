@@ -80,6 +80,12 @@ public class DoctorController extends HttpServlet {
 		
 		try {
 			switch (command) {
+				case "SHOW_ADD_DOCTOR_FORM":
+					showAddDoctorForm(request, response);
+					break;
+				case "ADD":
+					addDoctor(request, response);
+					break;
 				case "LIST":
 					listDoctors(request, response);
 					break;
@@ -96,6 +102,29 @@ public class DoctorController extends HttpServlet {
 		}
 	}
 	
+	private void addDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String specialization = request.getParameter("specialization");
+		String email = request.getParameter("email");
+		
+		Doctor doctor = new Doctor(firstName, lastName, specialization, email);
+		
+		doctorService.addDoctor(doctor);
+		
+		// PRG pattern
+		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=added");
+	}
+
+	private void showAddDoctorForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/add-doctor-form.jsp");
+		
+		requestDispatcher.forward(request, response);
+		
+	}
+
 	private void deleteDoctor(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		int doctorId = Integer.parseInt(request.getParameter("doctorId"));

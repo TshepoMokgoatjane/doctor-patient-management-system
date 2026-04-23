@@ -11,4 +11,6 @@ public interface DoctorService {
 	int getTotalPages(int pageSize) throws Exception;
 
 	void deleteDoctor(int doctorId);
+	
+	int addDoctor(Doctor doctor) throws Exception;
 }

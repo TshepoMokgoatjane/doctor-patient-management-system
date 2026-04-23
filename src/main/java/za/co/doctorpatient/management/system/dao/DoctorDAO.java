@@ -106,4 +106,46 @@ public class DoctorDAO {
 			throw new Exception("Unable to count doctors", e);
 		}
 	}
+	
+	public int addDoctor(Doctor doctor) throws Exception {
+		
+		LOGGER.info("Attempting to insert new doctor record in the database table");
+		
+		String sql = "INSERT INTO doctor (first_name, last_name, specialization, email) VALUES(?,?,?,?)";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+				) {
+			
+			// ALL placeholders MUST be set
+			preparedStatement.setString(1, doctor.getFirstName());
+			preparedStatement.setString(2, doctor.getLastName());
+			preparedStatement.setString(3, doctor.getSpecialization());
+			preparedStatement.setString(4, doctor.getEmail());
+			
+			int rowsAffected = preparedStatement.executeUpdate();
+			
+			if (rowsAffected == 0 ) {
+				LOGGER.error("Exception occurred, failed to insert new record");
+				throw new SQLException("Insert failed, no rows affected.");
+			}
+
+			try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+				
+				if (generatedKeys.next()) {
+					int generatedId = generatedKeys.getInt(1);
+					LOGGER.info("Doctor inserted successfully with ID {}", generatedId);
+					return generatedId;
+				} else {
+					throw new SQLException("Insert succeeded but no ID obtained.");
+				}
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to insert new doctor record in database table", e);
+			throw new Exception("Unable to insert new doctor", e);
+		}
+	}
 }

@@ -39,4 +39,9 @@ public class DoctorServiceImpl implements DoctorService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public int addDoctor(Doctor doctor) throws Exception {
+		return doctorDAO.addDoctor(doctor);
+	}
 }
