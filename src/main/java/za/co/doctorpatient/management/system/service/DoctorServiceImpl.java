@@ -19,12 +19,13 @@ public class DoctorServiceImpl implements DoctorService {
 		this.doctorDAO = doctorDAO;
 	}
 	
-	public List<Doctor> getDoctorsByPage(int page, int pageSize, String sortField, String sortDir) throws Exception {
+	public List<Doctor> getDoctorsByPage(int page, int pageSize, String sortField, String sortDir, String searchTerm) throws Exception {
 		
 		LOGGER.debug("Retrieving doctors for page {} with page size {}, sorted by {} {}", page, pageSize, sortField, sortDir);
 		
 		int offset = (page - 1) * pageSize;
-		return doctorDAO.getDoctors(offset, pageSize, sortField, sortDir);
+		
+		return doctorDAO.getDoctors(offset, pageSize, sortField, sortDir, searchTerm);
 	}
 	
 	public int getTotalPages(int pageSize) throws Exception {

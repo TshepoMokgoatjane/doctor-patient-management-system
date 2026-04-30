@@ -202,9 +202,16 @@ public class DoctorController extends HttpServlet {
 		
 		LOGGER.debug("Handling LIST doctors request");
 		
+		// Read searchTerm
+		String searchTerm = request.getParameter("searchTerm");
+		
+		if (searchTerm == null) {
+			searchTerm = "";
+		}
+		
 		// Pagination configuration
 		int page = 1;
-		int pageSize = 5; // doctors per page
+		int pageSize = 10; // doctors per page
 		
 		// Read page parameter
 		String pageParam = request.getParameter("page");
@@ -232,7 +239,7 @@ public class DoctorController extends HttpServlet {
 		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 		
 		// Fetch paginated data
-		List<Doctor> doctors = doctorService.getDoctorsByPage(page, pageSize, sortField, sortDir);
+		List<Doctor> doctors = doctorService.getDoctorsByPage(page, pageSize, sortField, sortDir, searchTerm);
 		
 		// Calculate total pages
 		int totalPages = doctorService.getTotalPages(pageSize);

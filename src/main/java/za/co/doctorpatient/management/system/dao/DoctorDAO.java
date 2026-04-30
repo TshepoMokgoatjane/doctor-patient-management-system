@@ -24,48 +24,61 @@ public class DoctorDAO {
 		this.dataSource = dataSource;
 	}
 	
-	public List<Doctor> getDoctors(int offset, int limit, String sortField, String sortDir) throws Exception {
+	private String resolveSortColumn(String sortField) {
 		
-		LOGGER.info("Fetching doctors with pagination and sorting");
-		
-		// Whitelist sortable columns
-		String orderByColumn;
+		if (sortField == null) {
+			return "last_name"; // default
+		}
 		
 		switch (sortField) {
 		case "firstName":
-			orderByColumn = "first_name";
-			break;
+			return "first_name";
 		case "lastName":
-			orderByColumn = "last_name";
-			break;
+			return "last_name";
 		case "specialization":
-			orderByColumn = "specialization";
-			break;
+			return "specialization";
 		case "email":
-			orderByColumn = "email";
-			break;
+			return "email";
 			default:
-				orderByColumn = "last_name";
+				return "last_name"; // fallback safety
 		}
+	}
+	
+	public List<Doctor> getDoctors(int offset, int limit, String sortField, String sortDir, String searchTerm) throws Exception {
 		
+		LOGGER.info("Fetching doctors with pagination, sorting and search");
+		
+		// Whitelist sortable columns
+		String orderByColumn = resolveSortColumn(sortField);
 		String orderDirection = "desc".equalsIgnoreCase(sortDir) ? "DESC" : "ASC";
 		
-		List<Doctor> doctors = new ArrayList<>();
-		
-		String sql = String.format("""
-				SELECT id, first_name, last_name, specialization, email 
+		String sql = """
+				SELECT id, first_name, last_name, specialization, email
 				FROM doctor
 				WHERE is_deleted = FALSE
-				ORDER BY %s %s
-				LIMIT ? OFFSET ?
-				""", orderByColumn, orderDirection);
+				AND (
+						LOWER(first_name) LIKE ?
+						OR LOWER(last_name) LIKE ?
+						OR LOWER(specialization) LIKE ?
+						OR LOWER(email) LIKE ?
+					)
+					ORDER BY %s %s
+					LIMIT ? OFFSET ?
+				""".formatted(orderByColumn, orderDirection);
+		
+		String likeTerm = "%" + (searchTerm == null ? "" : searchTerm.toLowerCase()) + "%";
+		
+		List<Doctor> doctors = new ArrayList<>();
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(sql);				
 		) {
-			
-			statement.setInt(1, limit);
-			statement.setInt(2, offset);
+			statement.setString(1, likeTerm);
+			statement.setString(2, likeTerm);
+			statement.setString(3, likeTerm);
+			statement.setString(4, likeTerm);
+			statement.setInt(5, limit);
+			statement.setInt(6, offset);
 			
 			try (ResultSet resultSet = statement.executeQuery()) {
 			
@@ -105,6 +118,37 @@ public class DoctorDAO {
 		} catch (SQLException e) {
 			LOGGER.error("Failed to count doctors", e);
 			throw new Exception("Unable to count doctors", e);
+		}
+	}
+	
+	public int getDoctorCount(String searchTerm) throws Exception {
+		
+		String sql = """
+				SELECT COUNT(*)
+				FROM doctor
+				WHERE is_deleted = FALSE;
+				AND (
+					LOWER(first_name) LIKE ?
+					OR LOWER(last_name) LIKE ?
+					OR LOWER(specialization) LIKE ?
+					OR LOWER(email) LIKE ?
+				)
+				""";
+		
+		String likeTerm = "%" + (searchTerm == null ? "" : searchTerm.toLowerCase()) + "%";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setString(1,  likeTerm);
+			preparedStatement.setString(2,  likeTerm);
+			preparedStatement.setString(3,  likeTerm);
+			preparedStatement.setString(4,  likeTerm);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			return resultSet.getInt(1);
+			
 		}
 	}
 	

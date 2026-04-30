@@ -16,6 +16,40 @@
 				</a>
 			</div>
 			
+			<!-- Search Feature Form -->
+			<form method="GET" action="${pageContext.request.contextPath}/DoctorController" class="row g-2 mb-3">
+				
+				<input type="hidden" name="command" value="LIST" />
+				<input type="hidden" name="sortField" value="${sortField}" />
+				<input type="hidden" name="sortDir" value="${sortDir}" />
+				
+				<div class="row justify-content-center mb-4">
+					<div class="col-md-8 ">
+					
+						<div class="input-group">
+							
+							<!-- Search button -->
+					        <button class="btn btn-warning" type="submit">
+					            Search
+					        </button>
+					
+					        <!-- Search input -->
+					        <input type="text"
+					               name="searchTerm"
+					               class="form-control"
+					               placeholder="Search by name, email, or specialization..."
+					               value="${param.searchTerm}" />
+					
+					        <!-- Clear button -->
+					        <a href="${pageContext.request.contextPath}/DoctorController?command=LIST"
+					           class="btn btn-outline-secondary">
+					            Clear
+					        </a>						
+						</div>
+					</div>
+				</div>	
+			</form>
+			
 			<!-- Success Message - ADDED -->
 			<c:if test="${param.success == 'added'}">
 				<div id="successAlert"
@@ -36,7 +70,7 @@
 					Doctor deleted successfully.
 				</div>
 			</c:if>
-			
+						
 			<!-- Success Message - Updated -->
 			<c:if test="${param.success == 'updated'}">
 				<div id="updatedAlert" class="alert alert-success fade show">
