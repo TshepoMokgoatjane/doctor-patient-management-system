@@ -221,4 +221,61 @@ public class DoctorDAO {
 		
 		throw new Exception("Doctor not found with ID: " + doctorId);
 	}
+	
+	public boolean checkIfEmailAlreadyExists(String email) throws Exception {
+		
+		LOGGER.info("Attempting to check if email {} already exists in our database", email);
+		
+		String sql = "SELECT COUNT(*) FROM doctor WHERE email=?";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setString(1, email);
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				
+				resultSet.next();
+				
+				LOGGER.info("Email already exists in our database {}", email);
+				
+				return resultSet.getInt(1) > 0;
+			}
+			
+		} catch (SQLException e) {
+			
+			LOGGER.error("Failed while checking if email already exists: {}", email, e);
+			
+			throw new Exception("Email existence check failed", e);
+		}
+		
+	}
+	
+	public boolean emailExistForOtherDoctor(String email, int doctorId) throws Exception {
+		
+		LOGGER.info("Attempting to check if email exists for other doctrs {} {}", email, doctorId);
+		
+		String sql = "SELECT COUNT(*) FROM doctor WHERE email = ? AND id <> ?";
+		
+		try (Connection connection = dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setString(1, email);
+			preparedStatement.setInt(2, doctorId);
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				
+				resultSet.next();
+				
+				LOGGER.info("Successfully checked false positives");
+				
+				return resultSet.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			
+			LOGGER.error("Failed checking duplicate email for update", e);
+			
+			throw new Exception("Duplicate email check failed", e);
+		}
+	}
 }

@@ -45,6 +45,8 @@ public class DoctorServiceImpl implements DoctorService {
 		
 		ValidationUtility.validateDoctor(doctor);
 		
+		ValidationUtility.validateNewDuplicateEmailChecks(doctor, doctorDAO);
+		
 		return doctorDAO.addDoctor(doctor);
 	}
 	
@@ -52,6 +54,8 @@ public class DoctorServiceImpl implements DoctorService {
 	public void updateDoctor(Doctor doctor) throws Exception {
 		
 		ValidationUtility.validateDoctor(doctor);
+		
+		ValidationUtility.validateUpdateDuplicateEmailChecks(doctor, doctorDAO);
 
 		doctorDAO.updateDoctor(doctor);
 	}

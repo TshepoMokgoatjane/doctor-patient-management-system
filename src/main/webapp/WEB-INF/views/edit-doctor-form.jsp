@@ -92,7 +92,8 @@
 					   id="email"
 					   name="email"
 					   value="${doctor.email}"
-					   required />
+					   required
+					   placeholder="name@example.com" />
 				
 				<c:if test="${errors.email != null}">
 					<div class="invalid-feedback">

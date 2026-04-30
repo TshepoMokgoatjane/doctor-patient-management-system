@@ -3,6 +3,7 @@ package za.co.doctorpatient.management.system.validation;
 import java.util.HashMap;
 import java.util.Map;
 
+import za.co.doctorpatient.management.system.dao.DoctorDAO;
 import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
 
@@ -31,6 +32,30 @@ public class ValidationUtility {
 		}
 		
 		if (!errors.isEmpty()) {
+			throw new ValidationException(errors);
+		}
+	}
+	
+	public static void validateNewDuplicateEmailChecks(Doctor doctor, DoctorDAO doctorDAO) throws Exception {
+		
+		if (doctorDAO.checkIfEmailAlreadyExists(doctor.getEmail())) {
+			
+			Map<String, String> errors = new HashMap<String, String>();
+			
+			errors.put("email", "E-mail address already exists, please pick a unique one");
+			
+			throw new ValidationException(errors);
+		}
+	}
+	
+	public static void validateUpdateDuplicateEmailChecks(Doctor doctor, DoctorDAO doctorDAO) throws Exception {
+		
+		if (doctorDAO.emailExistForOtherDoctor(doctor.getEmail(), doctor.getId())) {
+			
+			Map<String, String> errors = new HashMap<String, String>();
+			
+			errors.put("email", "E-mail address already exists, please pick a unique one");
+			
 			throw new ValidationException(errors);
 		}
 	}
