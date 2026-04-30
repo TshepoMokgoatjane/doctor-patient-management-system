@@ -55,6 +55,7 @@ public class DoctorDAO {
 		String sql = String.format("""
 				SELECT id, first_name, last_name, specialization, email 
 				FROM doctor
+				WHERE is_deleted = FALSE
 				ORDER BY %s %s
 				LIMIT ? OFFSET ?
 				""", orderByColumn, orderDirection);
@@ -93,7 +94,7 @@ public class DoctorDAO {
 	}
 	
 	public int getDoctorCount() throws Exception {
-		String sql = "SELECT COUNT(*) FROM doctor";
+		String sql = "SELECT COUNT(*) FROM doctor WHERE is_deleted = FALSE";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -147,11 +148,11 @@ public class DoctorDAO {
 		}
 	}
 	
-	public boolean deleteDoctor(int doctorId) throws Exception {
+	public boolean softDeleteDoctor(int doctorId) throws Exception {
 		
 		LOGGER.info("Attempting to delete doctor with ID {}", doctorId);
 		
-		String sql = "DELETE FROM doctor WHERE id=?";
+		String sql = "UPDATE doctor SET is_deleted=TRUE, deleted_at=CURRENT_TIMESTAMP WHERE id=?";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -196,7 +197,7 @@ public class DoctorDAO {
 		
 		LOGGER.info("Attempting to retrieve doctor by ID {}", doctorId);
 		
-		String sql = "SELECT id, first_name, last_name, specialization, email from doctor WHERE id=?";
+		String sql = "SELECT id, first_name, last_name, specialization, email from doctor WHERE is_deleted = FALSE AND id=?";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -226,7 +227,7 @@ public class DoctorDAO {
 		
 		LOGGER.info("Attempting to check if email {} already exists in our database", email);
 		
-		String sql = "SELECT COUNT(*) FROM doctor WHERE email=?";
+		String sql = "SELECT COUNT(*) FROM doctor WHERE is_deleted = FALSE AND email=?";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -255,7 +256,7 @@ public class DoctorDAO {
 		
 		LOGGER.info("Attempting to check if email exists for other doctrs {} {}", email, doctorId);
 		
-		String sql = "SELECT COUNT(*) FROM doctor WHERE email = ? AND id <> ?";
+		String sql = "SELECT COUNT(*) FROM doctor WHERE is_deleted = FALSE AND email = ? AND id <> ?";
 		
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

@@ -37,7 +37,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 	@Override
 	public void deleteDoctor(int doctorId) throws Exception {
-		doctorDAO.deleteDoctor(doctorId);
+		doctorDAO.softDeleteDoctor(doctorId);
 	}
 	
 	@Override
