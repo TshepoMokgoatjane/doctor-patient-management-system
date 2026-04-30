@@ -37,6 +37,13 @@
 				</div>
 			</c:if>
 			
+			<!-- Success Message - Updated -->
+			<c:if test="${param.success == 'updated'}">
+				<div id="updatedAlert" class="alert alert-success fade show">
+					Doctor's record updated successfully.
+				</div>
+			</c:if>
+			
 			<!-- Doctors Table Card -->
 			<div class="card shadow-sm">
 				<div class="card-body">
@@ -275,6 +282,15 @@
 				setTimeout(
 						() => {
 							const alert = document.getElementById('deleteAlert');
+							if (alert) {
+								const bsAlert = new bootstrap.Alert(alert);
+								bsAlert.close();
+							}
+						}, 5000	// 5 seconds	
+					);
+				setTimeout(
+						() => {
+							const alert = document.getElementById('updatedAlert');
 							if (alert) {
 								const bsAlert = new bootstrap.Alert(alert);
 								bsAlert.close();

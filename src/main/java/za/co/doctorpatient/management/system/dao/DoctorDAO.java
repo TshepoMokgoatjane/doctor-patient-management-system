@@ -166,4 +166,59 @@ public class DoctorDAO {
 			throw new Exception("Unabled to delete", e);
 		}
 	}
+
+	public void updateDoctor(Doctor doctor) throws Exception {
+		
+		LOGGER.info("Attempting to edit doctor's record in the database with ID {}", doctor.getId());
+		
+		String sql = "UPDATE doctor SET first_name=?, last_name=?, specialization=?, email=? WHERE id=?";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+						
+			preparedStatement.setString(1, doctor.getFirstName());
+			preparedStatement.setString(2, doctor.getLastName());
+			preparedStatement.setString(3, doctor.getSpecialization());
+			preparedStatement.setString(4, doctor.getEmail());
+			preparedStatement.setInt(5, doctor.getId());
+			
+			preparedStatement.executeUpdate();
+			
+			LOGGER.info("Successfully updated the details of the doctor with ID {}", doctor.getId());
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to edit doctor's record.");
+			throw new Exception("Unable to update doctor", e);
+		}
+	}
+	
+	public Doctor getDoctorById(int doctorId) throws Exception {
+		
+		LOGGER.info("Attempting to retrieve doctor by ID {}", doctorId);
+		
+		String sql = "SELECT id, first_name, last_name, specialization, email from doctor WHERE id=?";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setInt(1, doctorId);
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					return new Doctor(
+							resultSet.getInt("id"),
+							resultSet.getString("first_name"),
+							resultSet.getString("last_name"),
+							resultSet.getString("specialization"),
+							resultSet.getString("email")
+							);
+				}
+				LOGGER.info("Successfully retrieved the doctor's record with ID {}", doctorId);
+			}
+		}
+		
+		LOGGER.error("Failed to load doctor with ID {}", doctorId);
+		
+		throw new Exception("Doctor not found with ID: " + doctorId);
+	}
 }

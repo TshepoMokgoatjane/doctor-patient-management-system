@@ -13,4 +13,8 @@ public interface DoctorService {
 	void deleteDoctor(int doctorId) throws Exception;
 	
 	int addDoctor(Doctor doctor) throws Exception;
+
+	void updateDoctor(Doctor doctor) throws Exception;
+	
+	Doctor getDoctorById(int doctorId) throws Exception;
 }

@@ -43,4 +43,14 @@ public class DoctorServiceImpl implements DoctorService {
 	public int addDoctor(Doctor doctor) throws Exception {
 		return doctorDAO.addDoctor(doctor);
 	}
+	
+	@Override
+	public void updateDoctor(Doctor doctor) throws Exception {
+		doctorDAO.updateDoctor(doctor);
+	}
+
+	@Override
+	public Doctor getDoctorById(int doctorId) throws Exception {
+		return doctorDAO.getDoctorById(doctorId);
+	}
 }

@@ -21,7 +21,7 @@ import za.co.doctorpatient.management.system.service.DoctorService;
 import za.co.doctorpatient.management.system.service.DoctorServiceImpl;
 
 /**
- * Servlet implementation class DoctorServletController
+ * Servlet implementation class DoctorController
  */
 @WebServlet(description = "Handles all Web HTTP Request and Response in the Application.", urlPatterns = { "/DoctorController" })
 public class DoctorController extends HttpServlet {
@@ -47,7 +47,7 @@ public class DoctorController extends HttpServlet {
 		super.init();
 		
 		try {
-			LOGGER.info("Initializing DoctorServletController");
+			LOGGER.info("Initializing DoctorController");
 			
 			DoctorDAO doctorDAO = new DoctorDAO(dataSource);
 			doctorService = new DoctorServiceImpl(doctorDAO);
@@ -70,13 +70,14 @@ public class DoctorController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String command = request.getParameter("command");
 		
 		if (command == null) {
 			command = "LIST";
 		}
 		
-		LOGGER.info("DoctorServletController received command: {}", command);
+		LOGGER.info("DoctorController received command: {}", command);
 		
 		try {
 			switch (command) {
@@ -92,6 +93,12 @@ public class DoctorController extends HttpServlet {
 				case "DELETE":
 					deleteDoctor(request, response);
 					break;
+				case "LOAD":
+					loadDoctor(request, response);
+					break;
+				case "UPDATE":
+					updateDoctor(request, response);
+					break;
 				default:
 					LOGGER.warn("Unknown command '{}', defaulting to LIST", command);
 					listDoctors(request, response);
@@ -102,6 +109,35 @@ public class DoctorController extends HttpServlet {
 		}
 	}
 	
+	private void loadDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
+		
+		Doctor doctor = doctorService.getDoctorById(doctorId);
+		
+		request.setAttribute("doctor", doctor);
+		
+		request.getRequestDispatcher("/WEB-INF/views/edit-doctor-form.jsp").forward(request, response);
+		
+	}
+
+	private void updateDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		int id = Integer.parseInt(request.getParameter("doctorId"));
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String specialization = request.getParameter("specialization");
+		String email = request.getParameter("email");
+		
+		Doctor doctor = new Doctor(id, firstName, lastName, specialization, email);
+		
+		doctorService.updateDoctor(doctor);
+		
+		// PRG pattern
+		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=updated");
+		
+	}
+
 	private void addDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String firstName = request.getParameter("firstName");
