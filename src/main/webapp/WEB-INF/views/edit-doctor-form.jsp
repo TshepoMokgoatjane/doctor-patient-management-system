@@ -23,7 +23,7 @@
 		<!-- Global validation error -->
 		<c:if test="${not empty errors}">
 			<div class="alert alert-danger">
-				${errorMessage}
+				Oops! Please correct the errors below.
 			</div>
 		</c:if>
 		

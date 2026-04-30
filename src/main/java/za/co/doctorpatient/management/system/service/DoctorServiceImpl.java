@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import za.co.doctorpatient.management.system.dao.DoctorDAO;
 import za.co.doctorpatient.management.system.model.Doctor;
+import za.co.doctorpatient.management.system.validation.ValidationUtility;
 
 public class DoctorServiceImpl implements DoctorService {
 	
@@ -41,11 +42,17 @@ public class DoctorServiceImpl implements DoctorService {
 	
 	@Override
 	public int addDoctor(Doctor doctor) throws Exception {
+		
+		ValidationUtility.validateDoctor(doctor);
+		
 		return doctorDAO.addDoctor(doctor);
 	}
 	
 	@Override
 	public void updateDoctor(Doctor doctor) throws Exception {
+		
+		ValidationUtility.validateDoctor(doctor);
+
 		doctorDAO.updateDoctor(doctor);
 	}
 

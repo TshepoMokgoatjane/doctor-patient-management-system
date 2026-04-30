@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import za.co.doctorpatient.management.system.dao.DoctorDAO;
+import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
 import za.co.doctorpatient.management.system.service.DoctorService;
 import za.co.doctorpatient.management.system.service.DoctorServiceImpl;
@@ -131,10 +132,19 @@ public class DoctorController extends HttpServlet {
 		
 		Doctor doctor = new Doctor(id, firstName, lastName, specialization, email);
 		
-		doctorService.updateDoctor(doctor);
-		
-		// PRG pattern
-		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=updated");
+		try {
+			
+			doctorService.updateDoctor(doctor);
+			
+			// PRG pattern
+			response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=updated");
+			
+		} catch (ValidationException ve) {
+			request.setAttribute("errors", ve.getErrors());
+			request.setAttribute("doctor", doctor);
+			
+			request.getRequestDispatcher("/WEB-INF/views/edit-doctor-form.jsp").forward(request, response);
+		}
 		
 	}
 
@@ -147,10 +157,19 @@ public class DoctorController extends HttpServlet {
 		
 		Doctor doctor = new Doctor(firstName, lastName, specialization, email);
 		
-		doctorService.addDoctor(doctor);
-		
-		// PRG pattern
-		response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=added");
+		try {
+			
+			doctorService.addDoctor(doctor);
+			
+			// PRG pattern
+			response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST&success=added");
+			
+		} catch (ValidationException ve) {
+			request.setAttribute("errors", ve.getErrors());
+			request.setAttribute("doctor", doctor);
+			
+			request.getRequestDispatcher("/WEB-INF/views/add-doctor-form.jsp").forward(request, response);			
+		}
 	}
 
 	private void showAddDoctorForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
