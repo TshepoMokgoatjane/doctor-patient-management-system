@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import za.co.doctorpatient.management.system.dao.DoctorDAO;
 import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
+import za.co.doctorpatient.management.system.model.User;
 import za.co.doctorpatient.management.system.service.DoctorService;
 import za.co.doctorpatient.management.system.service.DoctorServiceImpl;
 
@@ -182,6 +183,12 @@ public class DoctorController extends HttpServlet {
 
 	private void deleteDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+		User user = (User) request.getSession().getAttribute("loggedInUser");
+		
+		if (user == null || !user.isAdmin()) {
+			throw new SecurityException("Unauthorized access");
+		}
+		
 		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
 		int page = Integer.parseInt(request.getParameter("page"));
 		String sortField = request.getParameter("sortField");

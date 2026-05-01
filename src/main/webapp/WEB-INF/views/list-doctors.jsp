@@ -9,11 +9,13 @@
 		
 			<!-- Page Header -->
 			<div class="d-flex justify-content-between align-items-center mb-4">
-				<h1 class="fw-bold">List of Doctors:</h1>
+				<h3 class="fw-bold">List of Doctors:</h3>
 				
-				<a href="${pageContext.request.contextPath}/DoctorController?command=SHOW_ADD_DOCTOR_FORM" class="btn btn-success">
-					Add Doctor
-				</a>
+				<c:if test="${sessionScope.loggedInUser.admin}">
+					<a href="${pageContext.request.contextPath}/DoctorController?command=SHOW_ADD_DOCTOR_FORM" class="btn btn-success">
+						Add Doctor
+					</a>
+				</c:if>
 			</div>
 			
 			<!-- Search Feature Form -->
@@ -129,7 +131,9 @@
 									</a>
 								</th>
 								
-								<th class="text-center">Action</th>
+								<c:if test="${sessionScope.loggedInUser.admin}">
+									<th class="text-center">Action</th>
+								</c:if>
 							</tr>
 						</thead>						
 						
@@ -154,24 +158,29 @@
 											<td>${doctor.lastName}</td>
 											<td>${doctor.specialization}</td>
 											<td>${doctor.email}</td>
-											<td class="text-center">
-												<a href="${editLink}"
-													class="btn btn-sm btn-primary me-1">
-													<i class="bi bi-pencil-square"></i> Edit
-												</a> 
-												<a href="#"													
-													class="btn btn-sm btn-danger"
-													data-bs-toggle="modal"
-													data-bs-target="#deleteDoctorModal"
-													data-doctor-id="${doctor.id}"
-													data-doctor-name="${doctor.firstName} ${doctor.lastName}"
-													data-page="${currentPage}"
-													data-sort-field="${sortField}"
-													data-sort-dir="${sortDir}"
-													>
-													<i class="bi bi-trash"></i> Delete
-												</a>
-											</td>
+											
+											<c:if test="${sessionScope.loggedInUser.admin}">
+												<td class="text-center">
+												
+													<a href="${editLink}"
+														class="btn btn-sm btn-primary me-1">
+														<i class="bi bi-pencil-square"></i> Edit
+													</a>
+																								
+													<a href="#"													
+														class="btn btn-sm btn-danger"
+														data-bs-toggle="modal"
+														data-bs-target="#deleteDoctorModal"
+														data-doctor-id="${doctor.id}"
+														data-doctor-name="${doctor.firstName} ${doctor.lastName}"
+														data-page="${currentPage}"
+														data-sort-field="${sortField}"
+														data-sort-dir="${sortDir}"
+														>
+														<i class="bi bi-trash"></i> Delete
+													</a> 
+												</td>												
+											</c:if>
 										</tr>				
 									</c:forEach>
 								</c:when>

@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -24,4 +26,33 @@
 		
 	<body class="bg-light">
 		
-		<div class="container mt-5">
+		<div class="container mt-4">
+		
+		<div class="mt-4 mb-4">
+		    <div class="d-flex align-items-center">
+		
+				<c:if test="${not empty sessionScope.loggedInUser}">
+		        <!-- Left: App Title -->
+		        <h1 class="mb-1">
+		            <a class="text-decoration-none text-dark"
+		               href="${pageContext.request.contextPath}/DoctorController?command=LIST">Doctor Patience Management System
+		            </a>
+		        </h1>
+		        </c:if>
+		
+		        <!-- Right: User info + Logout -->
+		        <div class="ms-auto d-flex align-items-center gap-2">
+		            <c:if test="${not empty sessionScope.loggedInUser}">
+		                <span class="text-muted small">
+		                    Logged in as
+		                    <strong>${sessionScope.loggedInUser.username}</strong>
+		                </span>
+		
+		                <a href="${pageContext.request.contextPath}/LogoutController"
+		                   class="btn btn-outline-danger btn-sm">
+		                    Logout
+		                </a>
+		            </c:if>
+		        </div>
+		    </div>
+		</div>
