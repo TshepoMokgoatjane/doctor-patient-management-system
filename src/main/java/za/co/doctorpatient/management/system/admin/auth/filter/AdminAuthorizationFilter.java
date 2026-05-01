@@ -22,14 +22,7 @@ public class AdminAuthorizationFilter implements Filter {
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		
-		String path = request.getRequestURI();
-		
-		if (path.endsWith("login.jsp") || path.contains("LoginController") || path.contains("LogoutController")) {
-			chain.doFilter(request, response);
-			return;
-		}
-		
+				
 		String command = request.getParameter("command");
 		
 		if (requiresAdmin(command)) {
@@ -50,6 +43,7 @@ public class AdminAuthorizationFilter implements Filter {
 	private boolean requiresAdmin(String command) {
 		return "DELETE".equals(command)
 				|| "UPDATE".equals(command)
-				|| "SHOW_ADMIN_DASHBOARD".equals(command);
+				|| "ADMIN_DASHBOARD".equals(command)
+				|| "VIEW_DELETED".equals(command);
 	}
 }

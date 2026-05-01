@@ -35,7 +35,7 @@
 		        <!-- Left: App Title -->
 		        <h1 class="mb-1">
 		            <a class="text-decoration-none text-dark"
-		               href="${pageContext.request.contextPath}/DoctorController?command=LIST">Doctor Patience Management System
+		               href="${pageContext.request.contextPath}/DoctorController?command=LIST">Doctor Patient Management System
 		            </a>
 		        </h1>
 		        </c:if>
@@ -47,6 +47,16 @@
 		                    Logged in as
 		                    <strong>${sessionScope.loggedInUser.username}</strong>
 		                </span>
+		                
+		                <c:if test="${sessionScope.loggedInUser.admin}">             
+		                		                
+		                |
+		                
+    						<a href="${pageContext.request.contextPath}/DoctorController?command=ADMIN_DASHBOARD">
+						        Admin Dashboard
+						    </a>
+						</c:if>
+		                
 		
 		                <a href="${pageContext.request.contextPath}/LogoutController"
 		                   class="btn btn-outline-danger btn-sm">

@@ -101,6 +101,9 @@ public class DoctorController extends HttpServlet {
 				case "UPDATE":
 					updateDoctor(request, response);
 					break;
+				case "ADMIN_DASHBOARD":
+					showAdminDashboard(request, response);
+					break;
 				default:
 					LOGGER.warn("Unknown command '{}', defaulting to LIST", command);
 					listDoctors(request, response);
@@ -111,6 +114,14 @@ public class DoctorController extends HttpServlet {
 		}
 	}
 	
+	private void showAdminDashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		LOGGER.info("Attempting to show ADMIN Dashboard");
+		
+		request.getRequestDispatcher("/WEB-INF/views/admin/admin-dashboard.jsp").forward(request, response);
+		
+	}
+
 	private void loadDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
