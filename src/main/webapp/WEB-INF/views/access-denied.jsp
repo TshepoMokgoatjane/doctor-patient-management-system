@@ -13,7 +13,7 @@
 
 	<h1 class="fw-bold">Oops! Access Denied:</h1>
 	
-	<a href="${pageContext.request.contextPath}/DoctorController?command=LIST">
+	<a href="${pageContext.request.contextPath}/LogoutController?logout=true">
 		Return to Home
 	</a>
 </div>
