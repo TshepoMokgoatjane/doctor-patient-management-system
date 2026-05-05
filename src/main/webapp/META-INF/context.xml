@@ -17,11 +17,11 @@
         timeBetweenEvictionRunsMillis="30000"
         minEvictableIdleTimeMillis="60000"
 
-        username="${MYSQLUSER}"
-        password="${MYSQLPASSWORD}"
+        username="${env.MYSQLUSER}"
+        password="${env.MYSQLPASSWORD}"
 
         driverClassName="com.mysql.cj.jdbc.Driver"
-        url="jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"
+        url="${env.MYSQL_URL}"
     />
 
 </Context>
