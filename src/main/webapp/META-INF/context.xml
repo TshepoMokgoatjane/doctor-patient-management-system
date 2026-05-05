@@ -21,7 +21,7 @@
         password="${env.MYSQLPASSWORD}"
 
         driverClassName="com.mysql.cj.jdbc.Driver"
-        url="${env.MYSQL_URL}"
+        url="jdbc:${env.MYSQL_URL}?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"
     />
 
 </Context>
