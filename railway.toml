@@ -1,0 +1,11 @@
+[build]
+# Railway will detect and use the Dockerfile automatically
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Health check endpoint
+healthcheckPath = "/LoginController"
+healthcheckTimeout = 300
+# Restart policy
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

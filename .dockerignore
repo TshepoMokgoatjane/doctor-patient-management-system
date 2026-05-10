@@ -1,0 +1,29 @@
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# Build output
+target/
+build/
+bin/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+*.iml
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Pre-built WAR (we build fresh in Docker)
+*.war
+
+# Logs
+*.log
+logs/
