@@ -45,15 +45,18 @@
 			</div>
 		</div>
 		
-		<!-- Future expansion -->
+		<!-- System Info -->
 		<div class="col-md-4">
 			<div class="card h-100 shadow-sm">
 				<div class="card-body">
 					<h5 class="card-title">System Info</h5>
 					<p class="card-text">
-						Admin-only system or audit information.
+						View system statistics, user management, and application environment.
 					</p>
-					<button class="btn btn-secondary">Coming Soon</button>
+					
+					<a href="${pageContext.request.contextPath}/DoctorController?command=SYSTEM_INFO">
+						View System Info
+					</a>
 				</div>
 			</div>
 		</div>

@@ -20,5 +20,9 @@ public interface DoctorService {
 	
 	List<Doctor> getDeletedDoctors() throws Exception;
 	
+	int getActiveDoctorCount() throws Exception;
+	
+	int getDeletedDoctorCount() throws Exception;
+	
 	void restoreDoctor(int doctorId) throws Exception;
 }

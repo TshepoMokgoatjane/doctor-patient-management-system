@@ -324,6 +324,23 @@ public class DoctorDAO {
 		}
 	}
 	
+	public int getDeletedDoctorCount() throws Exception {
+		
+		String sql = "SELECT COUNT(*) FROM doctor WHERE is_deleted = TRUE";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			
+			resultSet.next();
+			return resultSet.getInt(1);
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to count deleted doctors", e);
+			throw new Exception("Unable to count deleted doctors", e);
+		}
+	}
+	
 	public List<Doctor> getDeletedDoctors() throws Exception {
 		
 		LOGGER.info("Fetching soft-deleted doctors");

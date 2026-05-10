@@ -1,5 +1,7 @@
 package za.co.doctorpatient.management.system.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,5 +24,15 @@ public class UserServiceImpl implements UserService {
 		LOGGER.info("Attempting to authenticate user in service layer");
 		
 		return userDAO.authenticate(username, password);
+	}
+	
+	@Override
+	public List<User> getAllUsers() throws Exception {
+		return userDAO.getAllUsers();
+	}
+	
+	@Override
+	public int getUserCount() throws Exception {
+		return userDAO.getUserCount();
 	}
 }

@@ -3,6 +3,9 @@ package za.co.doctorpatient.management.system.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -54,6 +57,51 @@ public class UserDAO {
 			}
 		}
 		return null; // Invalid credentials
+	}
+	
+	public List<User> getAllUsers() throws Exception {
+		
+		LOGGER.info("Fetching all users");
+		
+		String sql = "SELECT id, username, role FROM users ORDER BY username";
+		
+		List<User> users = new ArrayList<>();
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			
+			while (resultSet.next()) {
+				User user = new User(
+						resultSet.getInt("id"),
+						resultSet.getString("username"),
+						Role.valueOf(resultSet.getString("role"))
+				);
+				users.add(user);
+			}
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to fetch users", e);
+			throw new Exception("Unable to retrieve users", e);
+		}
+		return users;
+	}
+	
+	public int getUserCount() throws Exception {
+		
+		String sql = "SELECT COUNT(*) FROM users WHERE is_active = TRUE";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			
+			resultSet.next();
+			return resultSet.getInt(1);
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to count users", e);
+			throw new Exception("Unable to count users", e);
+		}
 	}
 
 }

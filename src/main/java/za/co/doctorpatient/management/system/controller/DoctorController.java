@@ -16,11 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import za.co.doctorpatient.management.system.dao.DoctorDAO;
+import za.co.doctorpatient.management.system.dao.UserDAO;
 import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
 import za.co.doctorpatient.management.system.model.User;
 import za.co.doctorpatient.management.system.service.DoctorService;
 import za.co.doctorpatient.management.system.service.DoctorServiceImpl;
+import za.co.doctorpatient.management.system.service.UserService;
+import za.co.doctorpatient.management.system.service.UserServiceImpl;
 
 /**
  * Servlet implementation class DoctorController
@@ -40,6 +43,7 @@ public class DoctorController extends HttpServlet {
 	
 	
 	private DoctorService doctorService;
+	private UserService userService;
 	
 	// --------------------------------------------------------
 	// Servlet lifecycle
@@ -52,7 +56,9 @@ public class DoctorController extends HttpServlet {
 			LOGGER.info("Initializing DoctorController");
 			
 			DoctorDAO doctorDAO = new DoctorDAO(dataSource);
+			UserDAO userDAO = new UserDAO(dataSource);
 			doctorService = new DoctorServiceImpl(doctorDAO);
+			userService = new UserServiceImpl(userDAO);
 		} catch (Exception e) {
 			LOGGER.error("Failed to initialise DoctorServletController", e);
 			throw new ServletException(e);
@@ -109,6 +115,9 @@ public class DoctorController extends HttpServlet {
 				case "RESTORE":
 					restoreDoctor(request, response);
 					break;
+				case "SYSTEM_INFO":
+					showSystemInfo(request, response);
+					break;
 				default:
 					LOGGER.warn("Unknown command '{}', defaulting to LIST", command);
 					listDoctors(request, response);
@@ -147,6 +156,33 @@ public class DoctorController extends HttpServlet {
 		
 		// PRG pattern
 		response.sendRedirect(request.getContextPath() + "/DoctorController?command=VIEW_DELETED&success=restored");
+	}
+	
+	private void showSystemInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		LOGGER.info("Loading system info page");
+		
+		// Statistics
+		int activeDoctors = doctorService.getActiveDoctorCount();
+		int deletedDoctors = doctorService.getDeletedDoctorCount();
+		int totalUsers = userService.getUserCount();
+		
+		request.setAttribute("activeDoctors", activeDoctors);
+		request.setAttribute("deletedDoctors", deletedDoctors);
+		request.setAttribute("totalUsers", totalUsers);
+		
+		// User list
+		request.setAttribute("users", userService.getAllUsers());
+		
+		// Application info
+		request.setAttribute("javaVersion", System.getProperty("java.version"));
+		request.setAttribute("osName", System.getProperty("os.name"));
+		request.setAttribute("osArch", System.getProperty("os.arch"));
+		request.setAttribute("serverInfo", getServletContext().getServerInfo());
+		request.setAttribute("jvmMemoryMax", Runtime.getRuntime().maxMemory() / (1024 * 1024));
+		request.setAttribute("jvmMemoryUsed", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024));
+		
+		request.getRequestDispatcher("/WEB-INF/views/admin/system-info.jsp").forward(request, response);
 	}
 
 	private void loadDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
