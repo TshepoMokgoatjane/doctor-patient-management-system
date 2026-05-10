@@ -126,7 +126,7 @@ public class DoctorDAO {
 		String sql = """
 				SELECT COUNT(*)
 				FROM doctor
-				WHERE is_deleted = FALSE;
+				WHERE is_deleted = FALSE
 				AND (
 					LOWER(first_name) LIKE ?
 					OR LOWER(last_name) LIKE ?
