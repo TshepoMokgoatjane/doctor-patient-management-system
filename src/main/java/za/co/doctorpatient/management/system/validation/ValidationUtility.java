@@ -3,15 +3,18 @@ package za.co.doctorpatient.management.system.validation;
 import java.util.HashMap;
 import java.util.Map;
 
-import za.co.doctorpatient.management.system.dao.DoctorDAO;
 import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
 
+/**
+ * Pure validation utility — performs field-level checks only.
+ * Business rules (like duplicate email) belong in the service layer.
+ */
 public class ValidationUtility {
 	
-	public static void validateDoctor(Doctor doctor) throws Exception {
+	public static void validateDoctor(Doctor doctor) throws ValidationException {
 		
-		Map<String, String> errors = new HashMap<String, String>();
+		Map<String, String> errors = new HashMap<>();
 		
 		if (doctor.getFirstName() == null || doctor.getFirstName().trim().isEmpty()) {
 			errors.put("firstName", "First name is required!");
@@ -35,29 +38,4 @@ public class ValidationUtility {
 			throw new ValidationException(errors);
 		}
 	}
-	
-	public static void validateNewDuplicateEmailChecks(Doctor doctor, DoctorDAO doctorDAO) throws Exception {
-		
-		if (doctorDAO.checkIfEmailAlreadyExists(doctor.getEmail())) {
-			
-			Map<String, String> errors = new HashMap<String, String>();
-			
-			errors.put("email", "E-mail address already exists, please pick a unique one");
-			
-			throw new ValidationException(errors);
-		}
-	}
-	
-	public static void validateUpdateDuplicateEmailChecks(Doctor doctor, DoctorDAO doctorDAO) throws Exception {
-		
-		if (doctorDAO.emailExistForOtherDoctor(doctor.getEmail(), doctor.getId())) {
-			
-			Map<String, String> errors = new HashMap<String, String>();
-			
-			errors.put("email", "E-mail address already exists, please pick a unique one");
-			
-			throw new ValidationException(errors);
-		}
-	}
-
 }

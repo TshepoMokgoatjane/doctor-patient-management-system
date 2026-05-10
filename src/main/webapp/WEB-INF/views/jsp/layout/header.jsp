@@ -45,7 +45,7 @@
 		            <c:if test="${not empty sessionScope.loggedInUser}">
 		                <span class="text-muted small">
 		                    Logged in as
-		                    <strong>${sessionScope.loggedInUser.username}</strong>
+		                    <strong><c:out value="${sessionScope.loggedInUser.username}" /></strong>
 		                </span>
 		                
 		                <c:if test="${sessionScope.loggedInUser.admin}">             

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 	<%
 		request.setAttribute("pageTitle", "List of Doctors");
@@ -154,10 +155,10 @@
 										</c:url>
 									
 										<tr>
-											<td>${doctor.firstName}</td>
-											<td>${doctor.lastName}</td>
-											<td>${doctor.specialization}</td>
-											<td>${doctor.email}</td>
+											<td><c:out value="${doctor.firstName}" /></td>
+											<td><c:out value="${doctor.lastName}" /></td>
+											<td><c:out value="${doctor.specialization}" /></td>
+											<td><c:out value="${doctor.email}" /></td>
 											
 											<c:if test="${sessionScope.loggedInUser.admin}">
 												<td class="text-center">
@@ -172,7 +173,7 @@
 														data-bs-toggle="modal"
 														data-bs-target="#deleteDoctorModal"
 														data-doctor-id="${doctor.id}"
-														data-doctor-name="${doctor.firstName} ${doctor.lastName}"
+														data-doctor-name="${fn:escapeXml(doctor.firstName)} ${fn:escapeXml(doctor.lastName)}"
 														data-page="${currentPage}"
 														data-sort-field="${sortField}"
 														data-sort-dir="${sortDir}"

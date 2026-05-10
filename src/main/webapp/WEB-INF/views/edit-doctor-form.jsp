@@ -1,5 +1,6 @@
 <%@page contentType="text/html; charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%
 	request.setAttribute("pageTitle", "Edit Doctor Form");
@@ -40,7 +41,7 @@
 					   class="form-control ${errors.firstName != null ? 'is-invalid' : ''}"
 					   id="firstName"
 					   name="firstName"
-					   value="${doctor.firstName}"
+					   value="${fn:escapeXml(doctor.firstName)}"
 					   required />
 				
 				<c:if test="${errors.firstName != null}">
@@ -57,7 +58,7 @@
 					   class="form-control ${errors.lastName != null ? 'is-invalid' : ''}"
 					   id="lastName"
 					   name="lastName"
-					   value="${doctor.lastName}"
+					   value="${fn:escapeXml(doctor.lastName)}"
 					   required />
 				
 				<c:if test="${errors.lastName != null}">
@@ -74,7 +75,7 @@
 					   class="form-control ${errors.specialization != null ? 'is-invalid' : ''}"
 					   id="specialization"
 					   name="specialization"
-					   value="${doctor.specialization}"
+					   value="${fn:escapeXml(doctor.specialization)}"
 					   required />
 				
 				<c:if test="${errors.specialization != null}">
@@ -91,7 +92,7 @@
 					   class="form-control ${errors.email != null ? 'is-invalid' : ''}"
 					   id="email"
 					   name="email"
-					   value="${doctor.email}"
+					   value="${fn:escapeXml(doctor.email)}"
 					   required
 					   placeholder="name@example.com" />
 				

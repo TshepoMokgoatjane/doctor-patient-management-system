@@ -96,8 +96,8 @@ public class DoctorDAO {
 				}
 			}
 			
-			LOGGER.debug("Successfully fetched {} doctors: " , doctors.size());
-			LOGGER.info("Successfully fetched doctors from databse - closing resources...");
+			LOGGER.debug("Successfully fetched {} doctors", doctors.size());
+			LOGGER.info("Successfully fetched doctors from database - closing resources...");
 			
 		} catch (SQLException e) {
 			LOGGER.error("Failed to fetch doctors from database", e);
@@ -207,8 +207,8 @@ public class DoctorDAO {
 			return rows > 0;
 			
 		} catch (SQLException e) {
-			LOGGER.error("Failed to delete doctor with ID {} because {}", doctorId, e);
-			throw new Exception("Unabled to delete", e);
+			LOGGER.error("Failed to delete doctor with ID {}", doctorId, e);
+			throw new Exception("Unable to delete", e);
 		}
 	}
 
@@ -298,7 +298,7 @@ public class DoctorDAO {
 	
 	public boolean emailExistForOtherDoctor(String email, int doctorId) throws Exception {
 		
-		LOGGER.info("Attempting to check if email exists for other doctrs {} {}", email, doctorId);
+		LOGGER.info("Attempting to check if email exists for other doctors {} {}", email, doctorId);
 		
 		String sql = "SELECT COUNT(*) FROM doctor WHERE is_deleted = FALSE AND email = ? AND id <> ?";
 		

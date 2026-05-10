@@ -1,11 +1,13 @@
 package za.co.doctorpatient.management.system.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import za.co.doctorpatient.management.system.dao.DoctorDAO;
+import za.co.doctorpatient.management.system.exceptions.ValidationException;
 import za.co.doctorpatient.management.system.model.Doctor;
 import za.co.doctorpatient.management.system.validation.ValidationUtility;
 
@@ -19,6 +21,7 @@ public class DoctorServiceImpl implements DoctorService {
 		this.doctorDAO = doctorDAO;
 	}
 	
+	@Override
 	public List<Doctor> getDoctorsByPage(int page, int pageSize, String sortField, String sortDir, String searchTerm) throws Exception {
 		
 		LOGGER.debug("Retrieving doctors for page {} with page size {}, sorted by {} {}", page, pageSize, sortField, sortDir);
@@ -28,6 +31,7 @@ public class DoctorServiceImpl implements DoctorService {
 		return doctorDAO.getDoctors(offset, pageSize, sortField, sortDir, searchTerm);
 	}
 	
+	@Override
 	public int getTotalPages(int pageSize) throws Exception {
 		
 		LOGGER.debug("Calculating total number of pages with page size {}", pageSize);
@@ -44,9 +48,15 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public int addDoctor(Doctor doctor) throws Exception {
 		
+		// Field-level validation
 		ValidationUtility.validateDoctor(doctor);
 		
-		ValidationUtility.validateNewDuplicateEmailChecks(doctor, doctorDAO);
+		// Business rule: duplicate email check
+		if (doctorDAO.checkIfEmailAlreadyExists(doctor.getEmail())) {
+			throw new ValidationException(
+				Map.of("email", "E-mail address already exists, please pick a unique one")
+			);
+		}
 		
 		return doctorDAO.addDoctor(doctor);
 	}
@@ -54,9 +64,15 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public void updateDoctor(Doctor doctor) throws Exception {
 		
+		// Field-level validation
 		ValidationUtility.validateDoctor(doctor);
 		
-		ValidationUtility.validateUpdateDuplicateEmailChecks(doctor, doctorDAO);
+		// Business rule: duplicate email check (excluding current doctor)
+		if (doctorDAO.emailExistForOtherDoctor(doctor.getEmail(), doctor.getId())) {
+			throw new ValidationException(
+				Map.of("email", "E-mail address already exists, please pick a unique one")
+			);
+		}
 
 		doctorDAO.updateDoctor(doctor);
 	}

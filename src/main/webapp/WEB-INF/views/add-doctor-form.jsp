@@ -1,4 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <%
@@ -40,7 +41,7 @@
                        class="form-control ${errors.firstName != null ? 'is-invalid' : ''}"
                        id="firstName"
                        name="firstName"
-                       value="${param.firstName}"
+                       value="${fn:escapeXml(param.firstName)}"
                        required />
                  
                  <c:if test="${errors.firstName != null}">
@@ -57,7 +58,7 @@
                        class="form-control ${errors.lastName != null ? 'is-invalid' : ''}"
                        id="lastName"
                        name="lastName"
-                       value="${param.lastName}"
+                       value="${fn:escapeXml(param.lastName)}"
                        required />
                        
                  <c:if test="${errors.lastName != null}">
@@ -74,7 +75,7 @@
                        class="form-control ${errors.specialization != null ? 'is-invalid' : ''}"
                        id="specialization"
                        name="specialization"
-                       value="${param.specialization}"
+                       value="${fn:escapeXml(param.specialization)}"
                        required />
                        
                  <c:if test="${errors.specialization != null}">
@@ -91,7 +92,7 @@
                        class="form-control ${errors.email != null ? 'is-invalid' : ''}"
                        id="email"
                        name="email"
-                       value="${param.email}"
+                       value="${fn:escapeXml(param.email)}"
                        required
                        placeholder="name@example.com" />
                       
