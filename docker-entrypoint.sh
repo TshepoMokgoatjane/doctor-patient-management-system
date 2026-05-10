@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+
+# Wait for WAR to be extracted
+catalina.sh start
+sleep 3
+catalina.sh stop
+sleep 2
+
+# Write context.xml with actual environment variable values
+cat > /usr/local/tomcat/webapps/ROOT/META-INF/context.xml <<EOF
+<Context>
+    <Resource
+        name="jdbc/web_doctor_patient_management_system"
+        auth="Container"
+        type="javax.sql.DataSource"
+        factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+
+        maxTotal="20"
+        maxIdle="5"
+        minIdle="2"
+        maxWaitMillis="10000"
+
+        validationQuery="SELECT 1"
+        testOnBorrow="true"
+        testWhileIdle="true"
+        timeBetweenEvictionRunsMillis="30000"
+        minEvictableIdleTimeMillis="60000"
+
+        username="${MYSQLUSER}"
+        password="${MYSQLPASSWORD}"
+
+        driverClassName="com.mysql.cj.jdbc.Driver"
+        url="jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"
+    />
+</Context>
+EOF
+
+# Start Tomcat in foreground
+exec catalina.sh run
