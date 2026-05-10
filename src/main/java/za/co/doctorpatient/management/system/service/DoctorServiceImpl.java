@@ -81,4 +81,14 @@ public class DoctorServiceImpl implements DoctorService {
 	public Doctor getDoctorById(int doctorId) throws Exception {
 		return doctorDAO.getDoctorById(doctorId);
 	}
+	
+	@Override
+	public List<Doctor> getDeletedDoctors() throws Exception {
+		return doctorDAO.getDeletedDoctors();
+	}
+	
+	@Override
+	public void restoreDoctor(int doctorId) throws Exception {
+		doctorDAO.restoreDoctor(doctorId);
+	}
 }

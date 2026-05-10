@@ -17,4 +17,8 @@ public interface DoctorService {
 	void updateDoctor(Doctor doctor) throws Exception;
 	
 	Doctor getDoctorById(int doctorId) throws Exception;
+	
+	List<Doctor> getDeletedDoctors() throws Exception;
+	
+	void restoreDoctor(int doctorId) throws Exception;
 }

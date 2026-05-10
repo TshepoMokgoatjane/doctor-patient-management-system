@@ -323,4 +323,56 @@ public class DoctorDAO {
 			throw new Exception("Duplicate email check failed", e);
 		}
 	}
+	
+	public List<Doctor> getDeletedDoctors() throws Exception {
+		
+		LOGGER.info("Fetching soft-deleted doctors");
+		
+		String sql = "SELECT id, first_name, last_name, specialization, email FROM doctor WHERE is_deleted = TRUE ORDER BY deleted_at DESC";
+		
+		List<Doctor> doctors = new ArrayList<>();
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(sql);
+				ResultSet resultSet = statement.executeQuery()) {
+			
+			while (resultSet.next()) {
+				Doctor doctor = new Doctor(
+						resultSet.getInt("id"),
+						resultSet.getString("first_name"),
+						resultSet.getString("last_name"),
+						resultSet.getString("specialization"),
+						resultSet.getString("email")
+				);
+				doctors.add(doctor);
+			}
+			
+			LOGGER.info("Successfully fetched {} deleted doctors", doctors.size());
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to fetch deleted doctors", e);
+			throw new Exception("Unable to retrieve deleted doctors", e);
+		}
+		return doctors;
+	}
+	
+	public void restoreDoctor(int doctorId) throws Exception {
+		
+		LOGGER.info("Attempting to restore doctor with ID {}", doctorId);
+		
+		String sql = "UPDATE doctor SET is_deleted = FALSE, deleted_at = NULL WHERE id = ?";
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			
+			preparedStatement.setInt(1, doctorId);
+			preparedStatement.executeUpdate();
+			
+			LOGGER.info("Successfully restored doctor with ID {}", doctorId);
+			
+		} catch (SQLException e) {
+			LOGGER.error("Failed to restore doctor with ID {}", doctorId, e);
+			throw new Exception("Unable to restore doctor", e);
+		}
+	}
 }

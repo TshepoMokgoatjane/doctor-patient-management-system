@@ -48,6 +48,7 @@ public class AdminAuthorizationFilter implements Filter {
 				|| "LOAD".equals(command)
 				|| "SHOW_ADD_DOCTOR_FORM".equals(command)
 				|| "ADMIN_DASHBOARD".equals(command)
-				|| "VIEW_DELETED".equals(command);
+				|| "VIEW_DELETED".equals(command)
+				|| "RESTORE".equals(command);
 	}
 }

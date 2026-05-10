@@ -103,6 +103,12 @@ public class DoctorController extends HttpServlet {
 				case "ADMIN_DASHBOARD":
 					showAdminDashboard(request, response);
 					break;
+				case "VIEW_DELETED":
+					viewDeletedDoctors(request, response);
+					break;
+				case "RESTORE":
+					restoreDoctor(request, response);
+					break;
 				default:
 					LOGGER.warn("Unknown command '{}', defaulting to LIST", command);
 					listDoctors(request, response);
@@ -119,6 +125,28 @@ public class DoctorController extends HttpServlet {
 		
 		request.getRequestDispatcher("/WEB-INF/views/admin/admin-dashboard.jsp").forward(request, response);
 		
+	}
+	
+	private void viewDeletedDoctors(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		LOGGER.info("Fetching deleted doctors for admin view");
+		
+		List<Doctor> deletedDoctors = doctorService.getDeletedDoctors();
+		
+		request.setAttribute("deletedDoctors", deletedDoctors);
+		request.getRequestDispatcher("/WEB-INF/views/admin/deleted-doctors.jsp").forward(request, response);
+	}
+	
+	private void restoreDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		int doctorId = Integer.parseInt(request.getParameter("doctorId"));
+		
+		LOGGER.info("Restoring doctor with ID {}", doctorId);
+		
+		doctorService.restoreDoctor(doctorId);
+		
+		// PRG pattern
+		response.sendRedirect(request.getContextPath() + "/DoctorController?command=VIEW_DELETED&success=restored");
 	}
 
 	private void loadDoctor(HttpServletRequest request, HttpServletResponse response) throws Exception {
