@@ -44,6 +44,9 @@ public class AdminAuthorizationFilter implements Filter {
 	private boolean requiresAdmin(String command) {
 		return "DELETE".equals(command)
 				|| "UPDATE".equals(command)
+				|| "ADD".equals(command)
+				|| "LOAD".equals(command)
+				|| "SHOW_ADD_DOCTOR_FORM".equals(command)
 				|| "ADMIN_DASHBOARD".equals(command)
 				|| "VIEW_DELETED".equals(command);
 	}
