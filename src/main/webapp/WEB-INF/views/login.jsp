@@ -21,7 +21,7 @@
 		
 			<!--  Logout Success Message -->
 			<c:if test="${param.logout == 'true'}">
-				<div class="alert alert-success text-center">
+				<div id="logoutAlert" class="alert alert-success text-center">
 					You have been logged out successfully.
 				</div>
 			</c:if>
@@ -55,5 +55,15 @@
 		</div>
 	</div>	
 </div>
+
+<script>
+	setTimeout(() => {
+		const alert = document.getElementById('logoutAlert');
+		if (alert) {
+			const bsAlert = new bootstrap.Alert(alert);
+			bsAlert.close();
+		}
+	}, 5000);
+</script>
 
 <jsp:include page="jsp/layout/footer.jsp" />
