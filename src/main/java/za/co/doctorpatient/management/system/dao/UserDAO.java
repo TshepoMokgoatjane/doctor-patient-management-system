@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import za.co.doctorpatient.management.system.model.User;
 import za.co.doctorpatient.management.system.roles.Role;
+import za.co.doctorpatient.management.system.security.PasswordHasher;
 
 public class UserDAO {
 	
@@ -27,10 +28,9 @@ public class UserDAO {
 		LOGGER.info("Attempting to authenticate a user.");
 		
 		String sql = """
-				SELECT id, username, role
+				SELECT id, username, password, role
 				FROM users
 				WHERE username = ?
-				AND password = ?
 				AND is_active = TRUE
 				""";
 		
@@ -38,15 +38,18 @@ public class UserDAO {
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			
 			preparedStatement.setString(1, username);
-			preparedStatement.setString(2, password);
 
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
-					return new User(
-							resultSet.getInt("id"),
-							resultSet.getString("username"),
-							Role.valueOf(resultSet.getString("role"))
-						);							
+					String storedHash = resultSet.getString("password");
+					
+					if (PasswordHasher.verifyPassword(password, storedHash)) {
+						return new User(
+								resultSet.getInt("id"),
+								resultSet.getString("username"),
+								Role.valueOf(resultSet.getString("role"))
+							);
+					}
 				}
 			}
 		}

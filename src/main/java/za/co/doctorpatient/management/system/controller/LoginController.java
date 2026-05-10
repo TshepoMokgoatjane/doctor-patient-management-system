@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -61,7 +62,6 @@ public class LoginController extends HttpServlet {
      */
     public LoginController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -93,7 +93,11 @@ public class LoginController extends HttpServlet {
 				return;
 			}
 			
-			request.getSession().setAttribute("loggedInUser", user);
+			// Prevent session fixation: invalidate old session and create a new one
+			request.getSession().invalidate();
+			HttpSession newSession = request.getSession(true);
+			newSession.setAttribute("loggedInUser", user);
+			
 			response.sendRedirect(request.getContextPath() + "/DoctorController?command=LIST");
 			
 			LOGGER.info("Login successful for {}", username);
